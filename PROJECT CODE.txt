@@ -1,0 +1,439 @@
+CREATE TABLE customer (
+    Customer_ID VARCHAR2(8) NOT NULL,
+    customer_name VARCHAR2(80) NOT NULL,
+    gender VARCHAR2(10) NOT NULL,
+	DOB DATE NOT NULL,
+	age INT NOT NULL CHECK(age>=18),
+    address VARCHAR2(100) NOT NULL,
+    email_ID VARCHAR(80) NOT NULL,
+    SSN VARCHAR2(30) UNIQUE NOT NULL,
+    PRIMARY KEY(Customer_ID)
+);
+
+CREATE TABLE branch(
+    IFSC_code VARCHAR2(11) NOT NULL,
+    branch_address VARCHAR2(100) NOT NULL,
+    phone_No INT NOT NULL,
+    region VARCHAR2(50) NOT NULL,
+    zip_code INT NOT NULL,
+    PRIMARY KEY(IFSC_code)
+);
+
+CREATE TABLE departments(
+ dept_id VARCHAR2(20) NOT NULL, 
+ dept_name VARCHAR(80) NOT NULL,
+ PRIMARY KEY(dept_id)
+);
+
+CREATE TABLE atm(
+ atm_ID VARCHAR2(20) NOT NULL, 
+ atm_address VARCHAR2(100) NOT NULL,
+ IFSC_code VARCHAR2(11),
+ PRIMARY KEY (atm_ID),
+ FOREIGN KEY (IFSC_code) REFERENCES branch(IFSC_code) ON DELETE CASCADE
+);
+
+CREATE TABLE lockers(
+ locker_ID INT NOT NULL,
+ customer_id varchar2(8) NOT NULL,
+ IFSC_code VARCHAR2(11) NOT NULL,
+ PRIMARY KEY(locker_id),
+ FOREIGN KEY(IFSC_code) REFERENCES branch(IFSC_code) ON DELETE CASCADE,
+ FOREIGN KEY(customer_ID) REFERENCES customer(customer_ID) ON DELETE CASCADE
+ );
+ 
+ CREATE TABLE accounts(
+	customer_ID VARCHAR2(8) NOT NULL,
+    acc_no INT NOT NULL,
+	acc_type VARCHAR2(15) NOT NULL,
+    open_date DATE NOT NULL,
+    current_balance FLOAT NOT NULL,
+	IFSC_code VARCHAR2(11) NOT NULL,
+    PRIMARY KEY(acc_no),
+    FOREIGN KEY(IFSC_code) REFERENCES branch(IFSC_code) ON DELETE CASCADE,
+    FOREIGN KEY(customer_ID) REFERENCES customer(customer_ID) ON DELETE CASCADE
+);
+
+CREATE TABLE employee (
+    employee_ID VARCHAR2(6) NOT NULL,
+    IFSC_code VARCHAR2(11) NOT NULL,
+    dept_ID VARCHAR2(10) NOT NULL,
+    join_date DATE NOT NULL,
+    employee_position VARCHAR2(50) NOT NULL,
+    PRIMARY KEY(employee_ID),
+    FOREIGN KEY(IFSC_code) REFERENCES branch(IFSC_code) ON DELETE CASCADE,
+    FOREIGN KEY(dept_ID) REFERENCES departments(dept_id) ON DELETE CASCADE    
+);
+
+CREATE TABLE card_info(
+customer_ID VARCHAR2(8) NOT NULL,
+card_number INT NOT NULL,
+card_type VARCHAR2(20) NOT NULL,
+acc_no INT NOT NULL,
+IFSC_code VARCHAR2(11) NOT NULL,
+issue_date DATE NOT NULL,
+PRIMARY KEY(card_number),
+FOREIGN KEY(IFSC_code) REFERENCES branch(IFSC_code) ON DELETE CASCADE,
+FOREIGN KEY(customer_ID) REFERENCES customer(customer_ID) ON DELETE CASCADE,
+FOREIGN KEY(acc_no) REFERENCES accounts(acc_no) ON DELETE CASCADE
+);
+
+CREATE TABLE loan (
+customer_ID VARCHAR2(8) NOT NULL,
+loan_id VARCHAR(10),
+IFSC_code VARCHAR(11) NOT NULL,
+date_initiated DATE NOT NULL,
+loan_duration INT NOT NULL,
+interest FLOAT NOT NULL,
+acc_no INT NOT NULL,
+PRIMARY KEY(loan_id),
+FOREIGN KEY(IFSC_code) REFERENCES branch(IFSC_code) ON DELETE CASCADE,
+FOREIGN KEY(customer_ID) REFERENCES customer(customer_ID) ON DELETE CASCADE,
+FOREIGN KEY(acc_no) REFERENCES accounts(acc_no) ON DELETE CASCADE
+);
+
+CREATE TABLE transactions(		
+    customer_ID VARCHAR2(8) NOT NULL,					
+    acc_no INT NOT NULL,
+	transaction_ID VARCHAR2(8) NOT NULL,
+    amount FLOAT NOT NULL,
+    transaction_date DATE NOT NULL,
+    transaction_type VARCHAR2(15) NOT NULL,
+    PRIMARY KEY(transaction_ID),
+    FOREIGN KEY(customer_ID) REFERENCES customer(customer_ID),
+	FOREIGN KEY(acc_no) REFERENCES accounts(acc_no)
+);
+
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A1', 'Paxon', 'Male', to_date('2012-12-28', 'YYYY-MM-DD'), 22, '51243 Ridge Oak Drive', 'plawry0@1688.com', '674305881');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A2', 'Cybil', 'Female', to_date('1984-03-29', 'YYYY-MM-DD'), 35, '93 Mallory Lane', 'cviant1@bbc.co.uk', '305-12-2563');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A3', 'Stoddard', 'Female', to_date('1951-08-26', 'YYYY-MM-DD'), 68, '1723 Fairview Alley', 'slandon2@e-recht24.de', '783-12-6673');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A4', 'Joellyn', 'Female', to_date('1967-10-31', 'YYYY-MM-DD'), 52, '4432 Forest Court', 'jcolhoun3@amazonaws.com', '899-92-8059');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A5', 'Balduin', 'Male', to_date('1942-09-01', 'YYYY-MM-DD'), 77, '0403 Mifflin Place', 'bkuhlen4@house.gov', '606-78-4186');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A6', 'Katti', 'Female', to_date('1954-03-06', 'YYYY-MM-DD'), 64, '305 Independence Trail', 'kflynn5@prlog.org', '837-08-2751');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A7', 'Stuart', 'Male', to_date('1954-12-21', 'YYYY-MM-DD'), 64, '66 Chive Junction', 'shayth6@dion.ne.jp', '507-12-0296');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A8', 'Stevena', 'Female', to_date('1996-01-21', 'YYYY-MM-DD'), 23, '2 Bluestem Place', 'sbowker7@upenn.edu', '562-22-3488');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A9', 'Delilah', 'Female', to_date('1993-06-23', 'YYYY-MM-DD'), 26, '7 Arizona Point', 'djacson8@wisc.edu', '763-77-4911');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A10', 'Eolande', 'Female', to_date('1978-04-17', 'YYYY-MM-DD'), 40, '1609 American Ash Junction', 'ewolfit9@dmoz.org', '170-66-1821');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A11', 'Ashely', 'Female', to_date('1952-10-26', 'YYYY-MM-DD'), 66, '27910 Lotheville Circle', 'amckilroea@dyndns.org', '802-62-8567');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A12', 'Candis', 'Female', to_date('1990-04-20', 'YYYY-MM-DD'), 29, '35 Armistice Road', 'ccornwallb@ucoz.com', '414-48-2905');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A13', 'Veda', 'Female', to_date('1962-10-28', 'YYYY-MM-DD'), 57, '7502 Monica Hill', 'vmitchardc@hc360.com', '822-44-3378');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A14', 'Ali', 'Male', to_date('1997-10-07', 'YYYY-MM-DD'), 21, '1104 Thierer Circle', 'acartledged@wordpress.com', '601-90-0441');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A15', 'Roddie', 'Male', to_date('1961-12-03', 'YYYY-MM-DD'), 57, '4578 Mcbride Court', 'rblewette@bloglovin.com', '106-02-5227');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A16', 'Layney', 'Female', to_date('2000-02-18', 'YYYY-MM-DD'), 19, '6579 Gerald Alley', 'lscatchardf@mayoclinic.com', '421-69-7045');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A17', 'Gherardo', 'Male', to_date('1980-11-16', 'YYYY-MM-DD'), 39, '7 Blaine Lane', 'gjorisseng@examiner.com', '173-91-0507');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A18', 'Debera', 'Female', to_date('1946-12-21', 'YYYY-MM-DD'), 72, '19 Kingsford Way', 'dpringleh@economist.com', '404-28-8125');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A19', 'Yale', 'Male', to_date('1985-08-04', 'YYYY-MM-DD'), 33, '9534 Fordem Trail', 'yioannidisi@artisteer.com', '637-76-0508');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A20', 'Allyce', 'Female', to_date('1974-07-30', 'YYYY-MM-DD'), 44, '58 Hooker Way', 'aclitheroej@amazon.co.jp', '536-36-4429');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A21', 'Mariam', 'Female', to_date('1981-04-20', 'YYYY-MM-DD'), 37, '14 Eagle Crest Parkway', 'mpattesallk@fc2.com', '127-64-8360');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A22', 'Mirna', 'Female', to_date('1992-03-09', 'YYYY-MM-DD'), 26, '3 Sugar Parkway', 'mpellettl@seesaa.net', '202-37-7054');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A23', 'Levon', 'Male', to_date('1940-12-21', 'YYYY-MM-DD'), 78, '5696 Jenna Hill', 'lchamperlenm@wiley.com', '661-75-2179');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A24', 'Lindi', 'Female', to_date('1997-07-09', 'YYYY-MM-DD'), 21, '4 Menomonie Lane', 'lrolyn@cisco.com', '498-27-1734');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A25', 'Cy', 'Male', to_date('1972-08-07', 'YYYY-MM-DD'), 46, '102 South Avenue', 'cforceo@multiply.com', '458-04-5068');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A26', 'Nataniel', 'Male', to_date('1948-11-03', 'YYYY-MM-DD'), 70, '2 Carioca Place', 'nleaneyp@amazon.co.jp', '336-85-1974');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A27', 'Farleigh', 'Male', to_date('1941-01-04', 'YYYY-MM-DD'), 77, '9 Mesta Road', 'fsimcoeq@goodreads.com', '848-58-0225');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A28', 'Cherri', 'Female', to_date('1996-01-26', 'YYYY-MM-DD'), 22, '9 School Park', 'cgallienner@cpanel.net', '505-76-2032');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A29', 'Marlon', 'Male', to_date('1999-01-07', 'YYYY-MM-DD'), 20, '58089 Coleman Circle', 'madaways@over-blog.com', '462-93-4873');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A30', 'Creigh', 'Male', to_date('1990-06-28', 'YYYY-MM-DD'), 29, '187 Meadow Vale Avenue', 'cmablestonet@goo.gl', '682-28-7381');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A31', 'Brod', 'Male', to_date('1942-01-14', 'YYYY-MM-DD'), 76, '9546 Manufacturers Road', 'bnorvellu@netvibes.com', '315-44-5177');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A32', 'Zelma', 'Female', to_date('2000-03-29', 'YYYY-MM-DD'), 19, '4 Crownhardt Crossing', 'ztowheyv@deviantart.com', '758-30-8208');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A33', 'Monte', 'Male', to_date('1992-01-27', 'YYYY-MM-DD'), 26, '50253 Fremont Trail', 'mdreinanw@java.com', '679-84-8191');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A34', 'Raf', 'Female', to_date('1941-06-03', 'YYYY-MM-DD'), 77, '51 Di Loreto Alley', 'remneyx@joomla.org', '178-04-6076');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A35', 'Jamison', 'Male', to_date('1991-11-04', 'YYYY-MM-DD'), 28, '72189 Main Junction', 'jsomersy@umich.edu', '547-01-6053');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A36', 'Jackquelin', 'Female', to_date('1962-10-14', 'YYYY-MM-DD'), 56, '3 Shopko Way', 'jwilcherz@networksolutions.com', '111-68-5527');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A37', 'Gasper', 'Male', to_date('1987-04-27', 'YYYY-MM-DD'), 31, '5474 Clemons Center', 'gqualtro10@ca.gov', '116-40-8973');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A38', 'Mahala', 'Female', to_date('1946-07-05', 'YYYY-MM-DD'), 72, '60601 Dryden Junction', 'modunneen11@toplist.cz', '826-73-5851');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A39', 'Talbert', 'Male', to_date('1941-03-22', 'YYYY-MM-DD'), 77, '1813 Hanson Junction', 'tjacobs12@vinaora.com', '448-46-9606');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A40', 'Carmelle', 'Female', to_date('1974-03-12', 'YYYY-MM-DD'), 44, '8732 Gale Pass', 'ctafani13@bluehost.com', '470-06-8178');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A41', 'Antin', 'Male', to_date('1952-01-20', 'YYYY-MM-DD'), 66, '6 Loeprich Street', 'amedeway14@typepad.com', '155-31-4481');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A42', 'Cacilie', 'Female', to_date('1955-06-25', 'YYYY-MM-DD'), 63, '12633 Westport Park', 'cfurlong15@google.cn', '687-08-4482');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A43', 'Jerrilyn', 'Female', to_date('1946-03-20', 'YYYY-MM-DD'), 72, '65 Menomonie Court', 'jsmorthwaite16@about.me', '839-47-0921');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A44', 'Thatcher', 'Male', to_date('1944-02-08', 'YYYY-MM-DD'), 74, '1712 Porter Parkway', 'tvancassel17@bloomberg.com', '611-60-0428');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A45', 'Loleta', 'Female', to_date('1966-04-22', 'YYYY-MM-DD'), 52, '30579 Basil Terrace', 'lpendlenton18@technorati.com', '599-54-5759');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A46', 'Chelsy', 'Female', to_date('1969-11-04', 'YYYY-MM-DD'), 49, '4 Graceland Park', 'cbernollet19@behance.net', '547-43-4821');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A47', 'Abeu', 'Male', to_date('1996-10-05', 'YYYY-MM-DD'), 22, '70 Dottie Crossing', 'aboffin1a@apache.org', '462-16-4747');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A48', 'Aldin', 'Male', to_date('1988-07-22', 'YYYY-MM-DD'), 30, '08 Grim Terrace', 'apinnere1b@spiegel.de', '270-85-8582');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A49', 'Dionysus', 'Male', to_date('1961-01-09', 'YYYY-MM-DD'), 57, '1 Dexter Hill', 'dmartine1c@reddit.com', '846-98-1058');
+insert into customer (customer_id, customer_name, gender, DOB, age, address, email_id, SSN) values ('A50', 'Florian', 'Male', to_date('1972-07-29', 'YYYY-MM-DD'), 46, '871 Hanson Point', 'fgrieg1d@creativecommons.org', '121-46-4790');
+
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B11', '2942 Shasta Terrace', '2257146971', 'Louisiana', 91789);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B12', '94 Sullivan Place', '2029285501', 'District of Columbia', 78956);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B13', '3597 New Castle Park', '3052401267', 'Florida', 18624);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B14', '1150 Little Fleur Center', '4059717442', 'Oklahoma', 49467);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B15', '00758 Longview Circle', '4089028449', 'California', 29298);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B16', '13054 Dorton Junction', '9154455055', 'Texas', 32561);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B17', '29 Bowman Lane', '7579305863', 'Virginia', 11956);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B18', '771 Annamark Street', '3164287470', 'Kansas', 70880);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B19', '655 Union Alley', '9375210042', 'Ohio', 75871);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B20', '58737 Blaine Center', '9163349437', 'California', 91962);
+
+insert into departments (dept_id, dept_name) values ('D21', 'Accounts');
+insert into departments (dept_id, dept_name) values ('D22', 'Customer Relations');
+insert into departments (dept_id, dept_name) values ('D23', 'Forex');
+insert into departments (dept_id, dept_name) values ('D24', 'Tellers');
+insert into departments (dept_id, dept_name) values ('D25', 'Deposits');
+insert into departments (dept_id, dept_name) values ('D26', 'Stocks');
+insert into departments (dept_id, dept_name) values ('D27', 'Equities');
+insert into departments (dept_id, dept_name) values ('D28', 'Front desk');
+
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM121', '155 Cordelia Road', 'B11');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM122', '6916 Hoard Way', 'B17');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM123', '24903 Scoville Lane', 'B15');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM124', '15 Redwing Center', 'B11');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM125', '841 Monica Plaza', 'B13');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM126', '7218 Barnett Point', 'B16');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM127', '31397 Fordem Way', 'B14');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM128', '8170 Cardinal Terrace', 'B14');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM129', '96 South Center', 'B11');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM130', '50051 Stephen Avenue', 'B12');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM131', '59 Carey Trail', 'B18');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM132', '84991 Michigan Trail', 'B20');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM133', '84 Golf Course Lane', 'B19');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM134', '8 Parkside Circle', 'B20');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM135', '11 Heffernan Junction', 'B14');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM136', '5 Oriole Drive', 'B12');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM137', '5 Delladonna Center', 'B13');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM138', '85 Stone Corner Alley', 'B16');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM139', '6 Almo Park', 'B17');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM140', '36572 Mcguire Park', 'B18');
+
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (931, 'A1', 'B11');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (932, 'A2', 'B12');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (933, 'A3', 'B13');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (934, 'A4', 'B14');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (935, 'A5', 'B15');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (936, 'A6', 'B16');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (937, 'A7', 'B17');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (938, 'A8', 'B18');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (939, 'A9', 'B19');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (940, 'A10', 'B20');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (941, 'A11', 'B11');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (942, 'A12', 'B12');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (943, 'A13', 'B13');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (944, 'A14', 'B14');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (945, 'A15', 'B15');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (946, 'A16', 'B16');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (947, 'A17', 'B17');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (948, 'A18', 'B18');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (949, 'A19', 'B19');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (950, 'A20', 'B20');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (951, 'A21', 'B11');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (952, 'A22', 'B12');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (953, 'A23', 'B13');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (954, 'A24', 'B14');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (955, 'A25', 'B15');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (956, 'A26', 'B16');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (957, 'A27', 'B17');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (958, 'A28', 'B18');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (959, 'A29', 'B20');
+insert into lockers (locker_ID, customer_ID, IFSC_code) values (960, 'A30', 'B16');
+
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A1', 660163, 'savings', to_date('2016-11-14', 'YYYY-MM-DD'), 5366859, 'B11');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A2', 856854, 'savings', to_date('2018-01-19', 'YYYY-MM-DD'), 132876, 'B12');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A3', 232318, 'checking', to_date('1997-09-16', 'YYYY-MM-DD'), 6558797, 'B13');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A4', 523274, 'checking', to_date('2008-05-02', 'YYYY-MM-DD'), 2726095, 'B14');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A5', 378429, 'savings', to_date('1988-08-16', 'YYYY-MM-DD'),  5637905, 'B15');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A6', 673081, 'savings', to_date('2015-05-31', 'YYYY-MM-DD'), 8450981, 'B16');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A7', 957449, 'checking', to_date('1959-09-12', 'YYYY-MM-DD'), 1604071, 'B17');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A8', 269192, 'savings', to_date('1982-11-10', 'YYYY-MM-DD'), 8107796, 'B18');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A9', 712229, 'checking', to_date('1997-04-19', 'YYYY-MM-DD'), 1883249, 'B19');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A10', 211894,'savings', to_date('1968-10-19', 'YYYY-MM-DD'), 6416756, 'B20');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A11', 229972,'checking', to_date('2014-02-17', 'YYYY-MM-DD'), 6827328, 'B16');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A12', 482819,'savings', to_date('2012-12-09', 'YYYY-MM-DD'), 9249139, 'B12');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A13', 224156, 'checking', to_date('1966-07-24', 'YYYY-MM-DD'), 4716460, 'B19');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A14', 590762, 'savings', to_date('1988-06-19', 'YYYY-MM-DD'), 219206, 'B16');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A15', 397781, 'savings', to_date('2014-11-23', 'YYYY-MM-DD'), 932820, 'B19');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A16', 530550, 'checking', to_date('1975-11-08', 'YYYY-MM-DD'), 7369430, 'B17');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A17', 111756, 'savings', to_date('1958-06-20', 'YYYY-MM-DD'), 8365715, 'B16');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A18', 221616, 'checking', to_date('1988-05-24', 'YYYY-MM-DD'), 9814706, 'B19');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A19', 602373, 'savings', to_date('1992-12-20', 'YYYY-MM-DD'), 2429709, 'B19');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A20', 584560, 'checking', to_date('2005-08-08', 'YYYY-MM-DD'), 5826520, 'B12');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A21', 871054, 'savings', to_date('1979-08-12', 'YYYY-MM-DD'), 398657, 'B19');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A22', 155066, 'checking', to_date('1972-06-30', 'YYYY-MM-DD'), 8253918, 'B16');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A23', 471743, 'savings', to_date('1970-01-16', 'YYYY-MM-DD'), 5370204, 'B19');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A24', 756588, 'savings', to_date('1968-04-11', 'YYYY-MM-DD'), 2579984, 'B11');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A25', 730762, 'checking', to_date('2018-09-05', 'YYYY-MM-DD'), 2239962, 'B11');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A26', 401111, 'savings', to_date('1985-02-19', 'YYYY-MM-DD'), 1630025, 'B15');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A27', 488142, 'checking', to_date('1965-02-07', 'YYYY-MM-DD'), 2146339, 'B17');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A28', 254866, 'savings', to_date('1977-02-02', 'YYYY-MM-DD'), 9722287, 'B17');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A29', 875464, 'checking', to_date('2015-10-26', 'YYYY-MM-DD'), 958163, 'B17');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A30', 391616, 'savings', to_date('1995-08-08', 'YYYY-MM-DD'), 3542177, 'B17');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A31', 167892, 'savings', to_date('1976-03-02', 'YYYY-MM-DD'), 9862175, 'B14');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A32', 638218, 'checking', to_date('1964-02-15', 'YYYY-MM-DD'), 6170348, 'B11');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A33', 608010, 'savings', to_date('1990-06-11', 'YYYY-MM-DD'), 6959293, 'B11');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A34', 837521, 'checking', to_date('1970-07-29', 'YYYY-MM-DD'), 8251111, 'B14');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A35', 200689, 'savings', to_date('1993-11-08', 'YYYY-MM-DD'),  942541, 'B11');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A36', 990513, 'checking',to_date( '1978-01-24', 'YYYY-MM-DD'),  3113884, 'B14');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A37', 450952, 'savings', to_date('1972-11-30', 'YYYY-MM-DD'), 3745425, 'B16');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A38', 274201, 'checking', to_date('1979-03-08', 'YYYY-MM-DD'),  3831339, 'B12');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A39', 398627, 'savings', to_date('1959-07-23', 'YYYY-MM-DD'), 9965235, 'B11');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A40', 968840, 'savings', to_date('2015-09-25', 'YYYY-MM-DD'), 4503753, 'B11');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A41', 418120, 'savings', to_date('2009-08-09', 'YYYY-MM-DD'), 7160197, 'B20');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A42', 330947, 'checking', to_date('2014-01-20', 'YYYY-MM-DD'),  7032282, 'B20');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A43', 150710, 'savings', to_date('1978-09-26', 'YYYY-MM-DD'),  4824986, 'B20');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A44', 360812, 'checking', to_date('1960-02-20', 'YYYY-MM-DD'), 7330748, 'B12');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A45', 673021, 'savings', to_date('2002-12-31', 'YYYY-MM-DD'), 8763883, 'B14');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A46', 481453, 'checking', to_date('1964-07-06', 'YYYY-MM-DD'),  442703, 'B12');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A47', 427562, 'savings', to_date('1989-06-20', 'YYYY-MM-DD'), 13213, 'B20');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A48', 368373, 'checking', to_date('1965-11-06', 'YYYY-MM-DD'),  4015426, 'B20');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A49', 333820, 'savings', to_date('1966-02-03', 'YYYY-MM-DD'),  7932161, 'B12');
+insert into accounts (customer_ID, acc_no, acc_type, open_date, current_balance, IFSC_code) values ('A50', 913723, 'checking', to_date('2017-03-06', 'YYYY-MM-DD'), 8631197, 'B14');
+
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E1', 'B11', 'D21', to_date('2015-09-05', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E2', 'B12', 'D26', to_date('2019-03-20', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E3', 'B11', 'D28', to_date('2016-11-03', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E4', 'B11', 'D21', to_date('2018-04-08', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E5', 'B12', 'D22', to_date('2016-09-06', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E6', 'B13', 'D23', to_date('2016-04-02', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E7', 'B14', 'D23', to_date('2017-02-08', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E8', 'B13', 'D26', to_date('2016-01-22', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E9', 'B12', 'D28', to_date('2018-07-31', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E10', 'B12', 'D24', to_date('2018-09-26', 'YYYY-MM-DD'), 'Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E11', 'B15', 'D26', to_date('2018-12-07', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E12', 'B14', 'D24', to_date('2016-12-25', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E13', 'B13', 'D27', to_date('2016-04-12', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E14', 'B14', 'D27', to_date('2017-06-17', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E15', 'B15', 'D28', to_date('2018-05-10', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E16', 'B16', 'D21', to_date('2019-01-12', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E17', 'B16', 'D21', to_date('2017-07-03', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E18', 'B18', 'D23', to_date('2016-03-23', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E19', 'B19', 'D22', to_date('2018-12-31', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E20', 'B20', 'D25', to_date('2018-03-30', 'YYYY-MM-DD'), 'Teller');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E21', 'B12', 'D26', to_date('2018-07-31', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E22', 'B12', 'D27', to_date('2015-07-21', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E23', 'B13', 'D28', to_date('2018-02-17', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E24', 'B18', 'D26', to_date('2019-04-09', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E25', 'B18', 'D25', to_date('2015-12-26', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E26', 'B20', 'D27', to_date('2017-01-02', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E27', 'B17', 'D28', to_date('2018-11-15', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E28', 'B16', 'D24', to_date('2017-05-24', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E29', 'B15', 'D26', to_date('2018-12-15', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E30', 'B15', 'D21', to_date('2019-03-25', 'YYYY-MM-DD'), 'Accountant');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E31', 'B19', 'D23', to_date('2018-11-25', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E32', 'B14', 'D24', to_date('2016-11-02', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E33', 'B13', 'D26', to_date('2019-03-31', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E34', 'B11', 'D24', to_date('2016-05-21', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E35', 'B17', 'D28', to_date('2017-11-13', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E36', 'B17', 'D24', to_date('2017-01-16', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E37', 'B19', 'D25', to_date('2017-07-31', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E38', 'B20', 'D26', to_date('2016-11-08', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E39', 'B19', 'D21', to_date('2015-10-20', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E40', 'B15', 'D22', to_date('2018-01-24', 'YYYY-MM-DD'), 'Relationship Manager');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E41', 'B16', 'D23', to_date('2018-10-02', 'YYYY-MM-DD'), 'Auditor');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E42', 'B14', 'D26', to_date('2015-10-24', 'YYYY-MM-DD'), 'Auditor');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E43', 'B11', 'D27', to_date('2016-10-20', 'YYYY-MM-DD'), 'Auditor');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E44', 'B18', 'D27', to_date('2017-10-15', 'YYYY-MM-DD'), 'Auditor');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E45', 'B17', 'D24', to_date('2015-10-16', 'YYYY-MM-DD'), 'Auditor');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E46', 'B19', 'D25', to_date('2018-06-08', 'YYYY-MM-DD'), 'Auditor');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E47', 'B20', 'D25', to_date('2016-12-08', 'YYYY-MM-DD'), 'Auditor');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E48', 'B14', 'D21', to_date('2016-03-07', 'YYYY-MM-DD'), 'Auditor');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E49', 'B19', 'D22', to_date('2018-06-19', 'YYYY-MM-DD'), 'Auditor');
+insert into employee (employee_id, IFSC_code, dept_id, join_date, employee_position) values ('E50', 'B17', 'D24', to_date('2016-10-23', 'YYYY-MM-DD'), 'Auditor');
+
+
+
+
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A1', '5100130920762401', 'mastercard', 660163, 'B11', to_date('2018-10-14', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A3', '5430052215981408', 'mastercard', 232318, 'B13', to_date('2017-06-04', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A5', '5602219965404095', 'bankcard', 378429, 'B15', to_date('2017-04-15', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A7', '6334591871868695723', 'solo', 957449, 'B16', to_date('2018-09-21', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A8', '560223143182904138', 'china-unionpay', 269192, 'B18', to_date('2019-02-15', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A11', '560225008429230563', 'china-unionpay', 229972, 'B16', to_date('2019-01-24', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A13', '4041597903285', 'visa', 224156, 'B19', to_date('2017-03-05', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A15', '3554235801995057', 'jcb', 397781, 'B19', to_date('2016-06-23', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A17', '3531542075699671', 'jcb', 111756, 'B16', to_date('2016-09-30', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A19', '6304379088426190', 'laser', 602373, 'B19', to_date('2019-02-14', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A20', '4903140186664273231', 'switch', 584560, 'B12', to_date('2017-09-23', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A23', '4041596724930', 'visa', 471743, 'B19', to_date('2016-06-15', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A24', '4844687610303055', 'visa-electron', 756588, 'B11', to_date('2016-12-13', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A26', '3528887788438072', 'jcb', 401111, 'B15', to_date('2017-12-05', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A28', '5416425867874212', 'mastercard', 254866, 'B17', to_date('2017-05-31', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A31', '6759568000243124954', 'switch', 167892, 'B14', to_date('2016-08-23', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A32', '6759875104671792', 'switch', 638218, 'B11', to_date('2016-09-26', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A33', '5602247654127248', 'bankcard', 608010, 'B11', to_date('2018-06-20', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A38', '4508671505538774', 'visa-electron', 274201, 'B12', to_date('2017-10-01', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A40', '56022202471741908', 'china-unionpay', 968840, 'B11', to_date('2016-05-07', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A45', '3547743448643014', 'jcb', 673021, 'B14', to_date('2018-09-14', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A46', '3548820094418690', 'jcb', 481453, 'B12', to_date('2017-07-21', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A47', '3573553860741122', 'jcb', , 427562, 'B20', to_date('2017-12-09', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A48', '3550377322060583', 'jcb', 368373, 'B20', to_date('2018-05-27', 'YYYY-MM-DD'));
+insert into card_info (customer_id, card_number, card_type, acc_no, IFSC_code, issue_date) values ('A49' , '3567827171214013', 'jcb', 333820, 'B12', to_date('2016-06-28', 'YYYY-MM-DD'));
+
+
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A1', 'L64', 'B11', to_date('2015-07-27', 'YYYY-MM-DD'), 37, 6.77, 660163);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A2', 'L81', 'B12', to_date('2016-12-06', 'YYYY-MM-DD'), 24, 8.13, 856854);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A3', 'L94', 'B13', to_date('2016-07-15', 'YYYY-MM-DD'), 55, 9.21, 232318);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A4', 'L85', 'B14', to_date('2017-08-21', 'YYYY-MM-DD'), 44, 7.72, 523274);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A5', 'L93', 'B15', to_date('2019-01-13', 'YYYY-MM-DD'), 39, 8.72, 378429);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A46', 'L19', 'B12', to_date('2015-11-02', 'YYYY-MM-DD'), 60, 6.45, 481453);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A8', 'L60', 'B18', to_date('2018-09-15', 'YYYY-MM-DD'), 52, 9.36, 269192);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A9', 'L67', 'B19', to_date('2018-05-17', 'YYYY-MM-DD'), 46, 8.91, 712229);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A6', 'L101', 'B16', to_date('2017-03-27', 'YYYY-MM-DD'), 26, 9.63, 673081);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A10', 'L98', 'B10', to_date('2015-04-24', 'YYYY-MM-DD'), 38, 9.98, 211894);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A11', 'L6', 'B16', to_date('2018-08-18', 'YYYY-MM-DD'), 48, 6.32, 229972);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A12', 'L83', 'B12', to_date('2018-07-17', 'YYYY-MM-DD'), 26, 7.02, 482819);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A13', 'L70', 'B19', to_date('2018-04-27', 'YYYY-MM-DD'), 28, 9.47, 224156);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A14', 'L82', 'B16', to_date('2016-06-26', 'YYYY-MM-DD'), 56, 9.87, 590762);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A15', 'L16', 'B19', to_date('2016-09-06', 'YYYY-MM-DD'), 48, 7.39, 397781);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A16', 'L61', 'B17', to_date('2017-11-18', 'YYYY-MM-DD'), 47, 8.63, 530550);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A17', 'L97', 'B16', to_date('2018-02-19', 'YYYY-MM-DD'), 33, 8.56, 111756);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A18', 'L12', 'B19', to_date('2016-06-02', 'YYYY-MM-DD'), 44, 6.29, 221616);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A19', 'L1', 'B19', to_date('2018-01-20', 'YYYY-MM-DD'), 57, 9.03, 602373);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A20', 'L96', 'B12', to_date('2016-06-08', 'YYYY-MM-DD'), 28, 9.93, 584560);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A29', 'L65', 'B17', to_date('2018-05-26', 'YYYY-MM-DD'), 34, 7.66, 875464);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A32', 'L84', 'B11', to_date('2019-01-19', 'YYYY-MM-DD'), 42, 8.89, 638218);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A45', 'L77', 'B14', to_date('2018-02-17', 'YYYY-MM-DD'), 55, 8.79, 673021);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A24', 'L92', 'B11', to_date('2017-02-17', 'YYYY-MM-DD'), 48, 7.2, 756588);
+insert into loan (customer_id, loan_id, IFSC_code, date_initiated, loan_duration, interest, acc_no) values ('A25', 'L71', 'B11', to_date('2015-06-06', 'YYYY-MM-DD'), 34, 6.44, 730762);
+
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A1', 660163, 'T77', 286, to_date('2018-05-23', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A2', 856854, 'T56', 737, to_date('2019-01-02', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A35', 200689, 'T4', 392, to_date('2019-01-10', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A40', 968840, 'T28', 877, to_date('2017-11-19', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A5', 378429, 'T49', 678, to_date('2017-11-17', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A6', 673081, 'T2', 369, to_date('2019-01-17', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A7', 957449, 'T44', 892, to_date('2018-07-19', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A18', 221616, 'T53', 244, to_date('2019-03-16', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A29', 875464, 'T5', 676, to_date('2018-08-23', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A10', 211894, 'T6', 808, to_date('2017-10-20', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A11', 229972, 'T92', 664, to_date('2018-09-30', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A12', 482819, 'T58', 709, to_date('2017-04-20', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A33', 608010, 'T37', 536, to_date('2018-05-28', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A25', 730762, 'T93', 439, to_date('2018-07-15', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A28', 254866, 'T64', 410, to_date('2017-06-01', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A37', 450952, 'T76', 638, to_date('2018-01-01', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A43', 150710, 'T30', 932, to_date('2017-05-13', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A50', 913723, 'T52', 522, to_date('2019-03-29', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A45', 673021, 'T8', 631, to_date('2018-05-15', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A2', 856854, 'T1', 518, to_date('2017-08-24', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A11', 229972, 'T3', 221, to_date('2017-06-20', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A22', 155066, 'T9', 243, to_date('2019-03-17', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A23', 471743, 'T34', 896, to_date('2018-03-15', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A24', 756588, 'T55', 958, to_date('2018-03-10', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A25', 730762, 'T99', 535, to_date('2017-09-16', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A26', 401111, 'T63', 700, to_date('2019-01-23', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A27', 488142, 'T48', 407, to_date('2018-02-11', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A28', 254866, 'T65', 757, to_date('2017-04-19', 'YYYY-MM-DD'), 'debit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A29', 875464, 'T62', 235, to_date('2017-07-28', 'YYYY-MM-DD'), 'credit');
+insert into transactions (customer_id, acc_no, transaction_ID, amount, transaction_date, transaction_type) values ('A30', 391616, 'T90', 723, to_date('2017-11-03', 'YYYY-MM-DD'), 'debit');
+SELECT * FROM TRANSACTIONS;
+--> selecting all employees who joined between two particualar dates
+select * from employee where join_date BETWEEN to_date('2016-01-22','YYYY-MM-DD') AND to_date('2017-07-31','YYYY-MM-DD') AND employee_position = 'Manager';
+--> selecting all customer details and their transactions
+SELECT c.customer_id,c.customer_name,c.SSN,t.acc_no, t.transaction_ID,t.amount, t.transaction_type from customer c INNER JOIN transactions t ON c.customer_ID = t.customer_ID;
+-->slecting customer's locker details with branch 
+SELECT c.customer_ID,c.customer_name,l.locker_ID,l.IFSC_code from customer c INNER JOIN lockers l ON c.customer_ID = l.customer_ID;
+
+----->getting customer with highest number of transactions
+SELECT * FROM (
+  SELECT customer_ID,COUNT(*) 
+  FROM transactions
+  GROUP BY customer_ID
+  ORDER BY COUNT(*) DESC
+  ) 
+WHERE rownum = 1
+
+-->selecting employees belonging to one particular department and one particular branch
+select e.employee_ID, d.dept_name,e.IFSC_code FROM departments d INNER JOIN employee e ON d.dept_ID = e.dept_ID WHERE d.dept_name='Forex' AND IFSC_CODE = 'B13';
+
+
+

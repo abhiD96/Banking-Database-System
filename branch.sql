@@ -1,0 +1,10 @@
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B11', '2942 Shasta Terrace', '2257146971', 'Louisiana', 91789);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B12', '94 Sullivan Place', '2029285501', 'District of Columbia', 78956);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B13', '3597 New Castle Park', '3052401267', 'Florida', 18624);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B14', '1150 Little Fleur Center', '4059717442', 'Oklahoma', 49467);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B15', '00758 Longview Circle', '4089028449', 'California', 29298);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B16', '13054 Dorton Junction', '9154455055', 'Texas', 32561);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B17', '29 Bowman Lane', '7579305863', 'Virginia', 11956);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B18', '771 Annamark Street', '3164287470', 'Kansas', 70880);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B19', '655 Union Alley', '9375210042', 'Ohio', 75871);
+insert into branch (IFSC_code, branch_address, phone_no, region, zip_code) values ('B20', '58737 Blaine Center', '9163349437', 'California', 91962);

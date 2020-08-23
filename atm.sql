@@ -1,0 +1,21 @@
+
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM121', '155 Cordelia Road', 'B11');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM122', '6916 Hoard Way', 'B17');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM123', '24903 Scoville Lane', 'B15');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM124', '15 Redwing Center', 'B11');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM125', '841 Monica Plaza', 'B13');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM126', '7218 Barnett Point', 'B16');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM127', '31397 Fordem Way', 'B14');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM128', '8170 Cardinal Terrace', 'B14');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM129', '96 South Center', 'B11');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM130', '50051 Stephen Avenue', 'B12');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM131', '59 Carey Trail', 'B18');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM132', '84991 Michigan Trail', 'B20');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM133', '84 Golf Course Lane', 'B19');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM134', '8 Parkside Circle', 'B20');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM135', '11 Heffernan Junction', 'B14');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM136', '5 Oriole Drive', 'B12');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM137', '5 Delladonna Center', 'B13');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM138', '85 Stone Corner Alley', 'B16');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM139', '6 Almo Park', 'B17');
+insert into atm (atm_ID, atm_address, IFSC_code) values ('ATM140', '36572 Mcguire Park', 'B18');
